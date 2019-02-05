@@ -19,7 +19,9 @@
 
 
 
-disciplina = 'BMI5897' //example
+// process.argv[2] takes any command line argument. You should put the code of the discipline there.
+
+disciplina = process.argv[2] //example
 var fs = require('fs')
 janus2calendar = function (disciplina) {
     const puppeteer = require('puppeteer');
