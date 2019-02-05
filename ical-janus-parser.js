@@ -19,20 +19,18 @@
 
 
 
-
-
-disciplina = 'BMI5863' //example
-
+disciplina = 'BMI5897' //example
+var fs = require('fs')
 janus2calendar = function (disciplina) {
     const puppeteer = require('puppeteer');
-    const fs = require('fs')
+    var fs = require('fs')
     //escolha a disciplina
     //ICB5754
     //BMI5863
 
 
     let scrape = async () => {
-        const browser = await puppeteer.launch({ headless: true });
+        const browser = await puppeteer.launch({ headless: false });
         const page = await browser.newPage();
 
         await page.goto('https://uspdigital.usp.br/janus');
@@ -65,7 +63,7 @@ janus2calendar = function (disciplina) {
             let end = document.querySelector('body > table > tbody > tr:nth-child(12) > td > font:nth-child(4) > span').innerText;
             let beg = document.querySelector('body > table > tbody > tr:nth-child(12) > td > font:nth-child(2) > span').innerText;
             let days = document.querySelectorAll('body > table > tbody > tr:nth-child(19) > td > table > tbody > tr');
-            let local = document.querySelectorAll('body > table > tbody > tr:nth-child(19) > td > table > tbody > tr > td:nth-child(3)').innerText;
+            let local = document.querySelector('body > table > tbody > tr:nth-child(19) > td > table > tbody > tr > td:nth-child(3)').innerText;
             const nodelistToArray = Array.apply(null, days);
             var wk = {};
             for (i = 1; i < nodelistToArray.length + 1; i++) {
@@ -73,11 +71,11 @@ janus2calendar = function (disciplina) {
                 let wkhour = document.querySelector(' body > table > tbody > tr:nth-child(19) > td > table > tbody > tr:nth-child(' + i + ') > td:nth-child(2)').innerText;
                 wk[wkday] = wkhour
             }
-
+            
 
             return { name, prof, end, beg, wk, local }
         });
-        await browser.close()
+        browser.close()
         result['url'] = body
         return result;
 
@@ -110,26 +108,26 @@ janus2calendar = function (disciplina) {
 
             var days;
             var i = j;
-            //     if(i=="Segunda"){
-            //        days = 1
-            //     }
-            //     if(i=="Terça" || i=="'Terça'"){
-            //         days = 2     
-            //     }
-            //     if(i=="Quarta"){
-            //         days = 3
-            //     }
-            //     if(i=="Quinta"){
-            //        days = 4
-            //     }
-            //     if(i=="Sexta"){
-            //        days = 5
-            //     }
-            //  if (begDate.getDay() == 1){
-            //     console.log('monday')
-            //      days -= 1
-            //  }
-            // begDate.setTime( begDate.getTime() + days * 86400000 );
+                if(i=="Segunda"){
+                   days = 1
+                }
+                if(i=="Terça" || i=="'Terça'"){
+                    days = 2     
+                }
+                if(i=="Quarta"){
+                    days = 3
+                }
+                if(i=="Quinta"){
+                   days = 4
+                }
+                if(i=="Sexta"){
+                   days = 5
+                }
+             if (begDate.getDay() == 1){
+                console.log('monday')
+                 days -= 1
+             }
+            begDate.setTime( begDate.getTime() + days * 86400000 );
 
             var endTime = begDate
             var begHr = info.wk[i].split(" - ")[0].split(':')[0]
@@ -226,8 +224,11 @@ janus2calendar = function (disciplina) {
 
         // }
 
-    });
+    }).catch(function(motivo) {
+        console.log(motivo)
+        // rejeição
+     });
 
 }
 
-janus2calendar('BMI5863')
+janus2calendar(disciplina)
