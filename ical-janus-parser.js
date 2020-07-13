@@ -44,7 +44,7 @@ janus2calendar = function (disciplina) {
         await sgldis.type(disciplina);
         const submit = await frame.$('body > form:nth-child(1) > table > tbody > tr:nth-child(2) > td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > font > span > input[type="SUBMIT"]');
         await submit.click()
-        await page.waitFor(300);
+        await page.waitFor(1000);
         const oferecimento = await frame.$('body > table > tbody > tr > td > table > tbody > tr:nth-child(3) > td > table > tbody > tr:nth-child(2) > td:nth-child(4) > a > img')
         await oferecimento.click()
         let fna = "./" + disciplina + '.html'
